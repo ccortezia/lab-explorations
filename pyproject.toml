@@ -1,0 +1,18 @@
+[project]
+name = "pgrls-experiment"
+version = "0.1.0"
+description = "PostgreSQL Row-Level Security experiment with FastAPI"
+requires-python = ">=3.8"
+dependencies = [
+    "fastapi==0.104.1",
+    "uvicorn==0.24.0",
+    "psycopg2-binary==2.9.9",
+    "pyjwt==2.8.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
