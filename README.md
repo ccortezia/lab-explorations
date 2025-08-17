@@ -24,6 +24,9 @@ uv sync
 
 # Launch the database locally
 docker compose up -d
+
+# Run schema migrations
+./init.sh
 ```
 
 ## Instructions
