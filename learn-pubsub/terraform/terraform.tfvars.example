@@ -1,0 +1,9 @@
+# Copy this file to terraform.tfvars and adjust the values as needed
+
+project_id = "omnia-local-dev"
+region     = "us-central1"
+namespace  = "ccorteziatest"
+
+# Update this URL to your actual webhook endpoint for push subscriptions
+# For local development, you might use ngrok: https://your-ngrok-url.ngrok.io
+push_endpoint_base_url = "https://your-webhook-url.com"
