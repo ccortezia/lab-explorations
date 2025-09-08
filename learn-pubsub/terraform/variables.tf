@@ -19,5 +19,4 @@ variable "namespace" {
 variable "push_endpoint_base_url" {
   description = "Base URL for push subscriptions (will append /webhook)"
   type        = string
-  default     = "https://valued-steadily-skink.ngrok-free.app"
 }

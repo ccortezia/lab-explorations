@@ -1,75 +1,36 @@
 # GCP Pub/Sub Exploration with TypeScript
 
-A complete TypeScript application for exploring GCP Pub/Sub with both producer and consumer components, along with Terraform infrastructure.
+TypeScript application for exploring GCP Pub/Sub with producer/consumer components and Terraform infrastructure.
 
-## Project Structure
-
-```
-├── src/
-│   ├── producer.ts     # HTTP server for publishing messages
-│   └── consumer.ts     # CLI consumer with configurable behavior
-├── terraform/          # Infrastructure as Code
-│   ├── main.tf        # Main Terraform configuration
-│   ├── variables.tf   # Variable definitions
-│   ├── outputs.tf     # Output definitions
-│   └── terraform.tfvars.example
-└── package.json       # Dependencies and scripts
-```
-
-## Setup
-
-### Prerequisites
-
-- Node.js 22+ (managed with nvm) and pnpm 8+
-- GCP account with billing enabled
-- Terraform installed
-- GCP CLI (`gcloud`) configured with your credentials
-
-### 1. Setup Node.js Version
+## Quick Start
 
 ```bash
-# Use the correct Node.js version with nvm
-nvm use
-
-# If Node.js 22 is not installed, install it first
-nvm install 22
-nvm use 22
+pnpm install          # Install dependencies
+pnpm build            # Build TypeScript
+pnpm deploy           # Deploy infrastructure
+pnpm start:producer   # Start HTTP server
+pnpm start:consumer   # Start message consumer
 ```
 
-### 2. Install Dependencies
+## Primary Commands
 
-```bash
-pnpm install
-```
+| Command | Description |
+|---------|-------------|
+| `pnpm build` | Compile TypeScript to JavaScript |
+| `pnpm deploy` | Deploy GCP infrastructure with Terraform |
+| `pnpm destroy` | Tear down GCP infrastructure |
+| `pnpm start:producer` | Start HTTP server for publishing messages |
+| `pnpm start:consumer` | Start CLI consumer (add `-- --subscription <name>`) |
+| `pnpm dev:producer` | Start producer with auto-reload |
+| `pnpm dev:consumer` | Start consumer with auto-reload |
+| `pnpm send` | Quick test message via curl |
+| `pnpm stats` | View subscription statistics |
+| `pnpm lint` | Run ESLint |
+| `pnpm typecheck` | Run TypeScript type checking |
 
-### 3. Build the TypeScript Code
+## Infrastructure
 
-```bash
-pnpm run build
-```
-
-### 4. Deploy Infrastructure
-
-```bash
-cd terraform
-
-# Copy and edit the variables file
-cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars with your specific values
-
-# Initialize and apply Terraform
-terraform init
-terraform plan
-terraform apply
-```
-
-This creates:
-- **Topic**: `ccorteziatest-topic`
-- **Subscription 1**: `ccorteziatest-sub1-pull-unordered` (Pull, unordered)
-- **Subscription 2**: `ccorteziatest-sub2-push-unordered` (Push, unordered)
-- **Subscription 3**: `ccorteziatest-sub3-pull-ordered` (Pull, ordered)
-- **Subscription 4**: `ccorteziatest-sub4-push-ordered` (Push, ordered)
-- **Dead Letter Topic**: `ccorteziatest-dead-letter-topic`
+Creates 4 subscriptions (pull/push × ordered/unordered) + dead letter topic.
 
 ## Usage
 
@@ -86,12 +47,10 @@ pnpm run dev:producer
 Publish messages:
 
 ```bash
-# Basic message
-curl -X POST -H "Content-Type: application/json" \
-  -d '{"message":"Hello World!"}' \
-  http://localhost:3000/publish
+# Quick test message
+pnpm send
 
-# Message with custom attributes
+# Custom messages
 curl -X POST -H "Content-Type: application/json" \
   -d '{"message":"Hello with attributes", "attributes":{"priority":"high","source":"api"}}' \
   http://localhost:3000/publish
@@ -145,8 +104,8 @@ pnpm run dev:consumer -- --subscription sub1-pull-unordered --action ack
 pnpm run dev:consumer -- --subscription sub1-pull-unordered --action ack
 
 # Terminal 2: Send messages
-curl -X POST -H "Content-Type: application/json" -d '{"message":"Test message 1"}' http://localhost:3000/publish
-curl -X POST -H "Content-Type: application/json" -d '{"message":"Test message 2"}' http://localhost:3000/publish
+pnpm send
+pnpm send
 ```
 
 ### 2. Pull Subscriptions (Ordered)
@@ -154,7 +113,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"message":"Test message 2"
 # Terminal 1: Start consumer for ordered messages
 pnpm run dev:consumer -- --subscription sub3-pull-ordered --action ack
 
-# Terminal 2: Send messages with ordering keys
+# Terminal 2: Send messages with ordering keys (requires curl for attributes)
 curl -X POST -H "Content-Type: application/json" -d '{"message":"Order 1", "attributes":{"ordering_key":"user123"}}' http://localhost:3000/publish
 curl -X POST -H "Content-Type: application/json" -d '{"message":"Order 2", "attributes":{"ordering_key":"user123"}}' http://localhost:3000/publish
 ```
@@ -165,7 +124,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"message":"Order 2", "attr
 pnpm run dev:consumer -- --subscription sub1-pull-unordered --action nack
 
 # Send a message and watch it get redelivered multiple times
-curl -X POST -H "Content-Type: application/json" -d '{"message":"This will be redelivered"}' http://localhost:3000/publish
+pnpm send
 ```
 
 ### 4. Testing Message Ordering

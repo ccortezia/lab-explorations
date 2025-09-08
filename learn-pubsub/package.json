@@ -18,6 +18,8 @@
     "dev:push-server": "ts-node src/push-server.ts",
     "stats": "ts-node src/subscription-stats.ts",
     "send": "curl -X POST -H 'Content-Type: application/json' -d '{\"message\":\"Hello from pnpm send!\"}' http://localhost:3000/publish",
+    "deploy": "cd terraform && terraform init && terraform apply",
+    "destroy": "cd terraform && terraform destroy",
     "clean": "rm -rf dist",
     "lint": "eslint src/**/*.ts",
     "typecheck": "tsc --noEmit"

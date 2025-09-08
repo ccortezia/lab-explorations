@@ -6,4 +6,4 @@ namespace  = "ccorteziatest"
 
 # Update this URL to your actual webhook endpoint for push subscriptions
 # For local development, you might use ngrok: https://your-ngrok-url.ngrok.io
-push_endpoint_base_url = "https://your-webhook-url.com"
+push_endpoint_base_url = "https://example.invalid"
