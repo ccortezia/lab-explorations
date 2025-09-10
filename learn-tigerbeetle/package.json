@@ -1,0 +1,48 @@
+{
+  "name": "tigerbeetle-financial-api",
+  "version": "1.0.0",
+  "description": "TigerBeetle evaluation project with TypeScript financial API",
+  "main": "dist/index.js",
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "jest",
+    "test:e2e": "jest --config jest.e2e.config.js",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write src/**/*.ts",
+    "preinstall": "npx only-allow pnpm",
+    "repl": "docker exec -it tigerbeetle /tigerbeetle repl --cluster=0 --addresses=127.0.0.1:3001",
+    "reset": "docker compose down && rm -rf data && docker compose up -d",
+    "wallet:create": "curl -X POST http://localhost:3000/wallets",
+    "wallet:deposit": "sh -c 'curl -X POST \"http://localhost:3000/wallets/$0/deposit\" -H \"Content-Type: application/json\" -d \"{\\\"amount\\\": \\\"$1\\\"}\"'",
+    "wallet:withdraw": "sh -c 'curl -X POST \"http://localhost:3000/wallets/$0/withdraw\" -H \"Content-Type: application/json\" -d \"{\\\"amount\\\": \\\"$1\\\"}\"'",
+    "wallet:check": "sh -c 'curl \"http://localhost:3000/wallets/$0/balance\"'"
+  },
+  "keywords": ["tigerbeetle", "financial", "api", "typescript", "hono"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hono": "^4.0.0",
+    "tigerbeetle-node": "^0.16.52",
+    "@hono/node-server": "^1.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "tsx": "^4.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "prettier": "^3.0.0",
+    "supertest": "^6.3.0",
+    "@types/supertest": "^6.0.0"
+  }
+}
