@@ -57,12 +57,52 @@ The API will be available at http://localhost:3000
 ### 5. Run Tests
 
 ```bash
+# Unit tests
+pnpm test
+
 # E2E tests (requires TigerBeetle running)
 pnpm test:e2e
 ```
 
+## Available Commands
+
+### Development
+```bash
+pnpm dev          # Start development server with hot reload
+pnpm build        # Compile TypeScript to JavaScript
+pnpm start        # Run compiled JavaScript
+pnpm lint         # Run ESLint
+pnpm format       # Format code with Prettier
+```
+
+### TigerBeetle Management
+```bash
+pnpm reset        # Reset TigerBeetle cluster and data
+pnpm repl         # Connect to TigerBeetle REPL for debugging
+```
+
+### Wallet Operations (Convenience Commands)
+```bash
+pnpm wallet:create                        # Create a new wallet
+pnpm wallet:deposit {walletId} {amount}   # Deposit funds to wallet
+pnpm wallet:withdraw {walletId} {amount}  # Withdraw funds from wallet
+pnpm wallet:check {walletId}              # Check wallet balance
+```
+
 ## Example Usage
 
+### Using convenience commands
+```bash
+# Create a wallet and get the ID
+pnpm wallet:create
+
+# Use the returned wallet ID for operations
+pnpm wallet:deposit 1074895464115134024081286416278539 100
+pnpm wallet:check 1074895464115134024081286416278539
+pnpm wallet:withdraw 1074895464115134024081286416278539 30
+```
+
+### Using cURL directly
 ```bash
 # Create a wallet
 curl -X POST http://localhost:3000/wallets
@@ -79,6 +119,16 @@ curl http://localhost:3000/wallets/{walletId}/balance
 curl -X POST http://localhost:3000/wallets/{walletId}/withdraw \
   -H "Content-Type: application/json" \
   -d '{"amount": "30"}'
+```
+
+### Using TigerBeetle REPL for debugging
+```bash
+# Connect to TigerBeetle REPL
+pnpm repl
+
+# In the REPL, you can run commands like:
+lookup_accounts id=1074895464115134024081286416278539
+lookup_transfers id=1164768013369158048774860443052065
 ```
 
 ## How It Works
